@@ -12,14 +12,16 @@ import {
     Form,
 } from "@/components/ui/form"
 import { Loader2 } from 'lucide-react'
-import { log } from 'console'
 import { useRouter } from 'next/navigation'
+import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions'
 
 const AuthForm = ({ type }: { type: string }) => {
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter()
     const formSchema = authFormSchema(type)
+    // const loggedInUser = await getLoggedInUser();
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -36,15 +38,15 @@ const AuthForm = ({ type }: { type: string }) => {
             if(type === 'sign-up') {
                 const newUser = await signUp(data)
                 setUser(newUser)
+                
+                if(newUser) router.push('/')
+                
             } else if (type === 'sign-in') {
                 const response = await signIn({
                     email: data.email,
                     password: data.password
                 }) 
-                if (response.status === 200) {
-                    log('success')
-                    router.push('/')
-                }
+                if (response) router.push('/')
             }
         } catch(error) {
             console.log(error)
@@ -117,7 +119,7 @@ const AuthForm = ({ type }: { type: string }) => {
                                 />
                                 <CustomInput
                                     control={form.control}
-                                    name='cidy'
+                                    name='city'
                                     label='City'
                                     placeholder='ex: Ben Tre city'
                                 />
