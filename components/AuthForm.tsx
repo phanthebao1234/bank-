@@ -40,21 +40,20 @@ const AuthForm = ({ type }: { type: string }) => {
                 const userData = {
                     firstName: data.firstName!,
                     lastName: data.lastName!,
-                    address1: data.address1,
+                    address1: data.address1!,
                     city: data.city!,
                     state: data.state!,
                     postalCode: data.postalCode!,
                     dateOfBirth: data.dateOfBirth!,
                     ssn: data.ssn!,
                     email: data.email,
-                    password: data.password,
-                }
+                    password: data.password
+                  }
+        
+                  const newUser = await signUp(userData);
+        
+                  setUser(newUser);
                 
-                const newUser = await signUp(data)
-                
-                setUser(newUser)
-                
-                if(newUser) router.push('/')
                 
             } else if (type === 'sign-in') {
                 const response = await signIn({
