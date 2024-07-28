@@ -7,18 +7,18 @@ import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 
 const Home = async ({ searchParams: {id, page} }: SearchParamProps) =>  {
   
+  const currentPage = Number(page as string) || 1;
   const loggedIn = await getLoggedInUser();
-  const accounts = await getAccounts({ userId: loggedIn.$id});
-  
-  
-  if (!accounts) return;
+  const accounts = await getAccounts({ 
+    userId: loggedIn.$id 
+  })
+
+  if(!accounts) return;
   
   const accountsData = accounts?.data;
-  const appwriteItemId = (id as string) || accountsData!.data[0].appwriteItemId;
-  
-  console.log(accounts, accountsData)
-  
-  const account = await getAccount({appwriteItemId})
+  const appwriteItemId = (id as string) || accountsData[0]?.appwriteItemId;
+
+  const account = await getAccount({ appwriteItemId })
   
   return (
     <section className="home">
